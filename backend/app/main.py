@@ -3,8 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import ResponseValidationError
 from elasticsearch import AsyncElasticsearch
-from string import punctuation
-from unidecode import unidecode as ud
 import os
 from collections import ChainMap
 
@@ -50,6 +48,9 @@ async def get_film(film_type: str, query: str):
     query = build_query(film_type, query)
     result = await esdb.search(index=os.environ['ELASTIC_INDEX'], query=query,
                                size=1, track_total_hits=True)
+    # If we get no results back, return an empty model
+    if result['hits']['total']['value'] == 0:
+        return schemas.Film()
     response = result['hits']['hits'][0]['_source']
     response.pop('type')
     response['rating'] = schemas.ID_TO_RATING[response['rating']]
@@ -112,30 +113,6 @@ async def get_all_aggs():
             response[agg][key] = data["doc_count"]
 
     return response
-
-
-def simplify_text(text):
-    """
-    Process the given text to be either queried or inserted into
-    the Elasticsearch database.
-
-    Args:
-        text (str): The text to process and simplify for use.
-
-    Returns:
-        (str): The text after being processed.
-
-    Notes:
-        The following changes are made to the string:
-            - Punctuation removed
-            - Character accents removed
-            - All extraneous whitespace removed
-            - Lowered capitalization
-    """
-    if isinstance(text, str):
-        text = ud(text.translate(str.maketrans('', '', punctuation)))
-        return ' '.join(text.split()).lower()
-    return ''
 
 
 def build_query(selector, search_text=''):
@@ -210,10 +187,10 @@ def build_aggs(avg_duration=False, histo_duration=False, directors=False,
         aggs["director_agg"] = {"terms": {"field": "director",
                                           "size": 5}}
     if actors:
-        aggs["actor_agg"] = { "terms": {"field": "cast",
+        aggs["actor_agg"] = { "terms": {"field": "cast.raw",
                                         "size": 5}}
     if genres:
-        aggs["genre_agg"] = { "terms": {"field": "genres",
+        aggs["genre_agg"] = { "terms": {"field": "genres.raw",
                                            "size": 5}}
     if countries:
         aggs["country_agg"] = {"terms": {"field": "country",
