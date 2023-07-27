@@ -1,10 +1,6 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import ResponseValidationError
-from elasticsearch import AsyncElasticsearch
 import os
-from collections import ChainMap
 
 import schemas
 from database import get_elastic_db, init_elastic_db
@@ -15,36 +11,37 @@ app = FastAPI(openapi_url="/api/docs/openapi.json",
 # Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://nginx:80'], # Where the frontend is hosted
+    allow_origins=['http://nginx:80'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Set Elasticsearch dependency
-async def get_db():
-    esdb = get_elastic_db()
-    try:
-        yield esdb
-    finally:
-        await esdb.close()
 
 esdb = get_elastic_db()
 
 @app.on_event("startup")
 async def startup():
     """"""
-    #esdb = await get_db().__anext__()
     await init_elastic_db(esdb)
 
 @app.on_event("shutdown")
 async def shutdown():
     """"""
-    #await esdb.close()
+    await esdb.close()
 
 
 @app.get("/api/film/{film_type}/", response_model=schemas.Film)
 async def get_film(film_type: str, query: str):
+    """
+    API endpoint for retrieving a film from the Elasticsearch database.
+
+    Args:
+        film_type (str): The type of film to retrieve, being 'movie' or 'show'.
+        query (str): The query text to search for in the database.
+
+    Returns:
+        (dict): The film data retrieved from the database.
+    """
     query = build_query(film_type, query)
     result = await esdb.search(index=os.environ['ELASTIC_INDEX'], query=query,
                                size=1, track_total_hits=True)
@@ -60,6 +57,12 @@ async def get_film(film_type: str, query: str):
 
 @app.get("/api/aggs/movie/", response_model=schemas.MovieAggs)
 async def get_movie_aggs():
+    """
+    API endpoint for retrieving movie aggregations from the Elasticsearch database.
+    
+    Returns:
+        (dict): The movie aggregation data retrieved from the database.
+    """
     response = {}
     query = {"term": {"type": 1}}
     aggs = build_aggs(avg_duration=True, histo_duration=True)
@@ -79,6 +82,12 @@ async def get_movie_aggs():
 
 @app.get("/api/aggs/show/", response_model=schemas.ShowAggs)
 async def get_show_aggs():
+    """
+    API endpoint for retrieving show aggregations from the Elasticsearch database.
+    
+    Returns:
+        (dict): The show aggregation data retrieved from the database.
+    """
     response = {}
     query = {"term": {"type": 0}}
     aggs = build_aggs()
@@ -92,6 +101,12 @@ async def get_show_aggs():
 
 @app.get("/api/aggs/", response_model=schemas.AllAggs)
 async def get_all_aggs():
+    """
+    API endpoint for retrieving all aggregations from the Elasticsearch database.
+    
+    Returns:
+        (dict): The total aggregation data retrieved from the database.
+    """
     response = {}
     query = {"match_all": {}}
     aggs = build_aggs(directors=True, actors=True, genres=True,
@@ -117,20 +132,14 @@ async def get_all_aggs():
 
 def build_query(selector, search_text=''):
     """
-    Create a custom-formatted query dictionary to be used for the
-    Elasticsearch database, based on the query texts provided.
+    A helper function for building the Elasticsearch query.
 
     Args:
-        inputs (tuple): The query texts provided by the user
-                        from the GET request, being 'title'
-                        and 'location'.
+        selector (str): The type of film to retrieve, being 'movie' or 'show'.
+        search_text (str): The query text to search for in the database.
 
     Returns:
-        (dict): The ingestible query request needed for
-                performing a search on Elasticsearch.
-        (dict): The ingestible aggreagation request needed for
-                performing aggregation calculations
-                on Elasticsearch.
+        (dict): The Elasticsearch query.
     """
     search_param = -1
     if selector == 'movie':
@@ -172,6 +181,19 @@ def build_query(selector, search_text=''):
 def build_aggs(avg_duration=False, histo_duration=False, directors=False,
                actors=False, genres=False, countries=False, ratings=False):
     """
+    A helper function for building the Elasticsearch aggregations query.
+
+    Args:
+        avg_duration (bool): Whether to include the average duration aggregation.
+        histo_duration (bool): Whether to include the histogram duration aggregation.
+        directors (bool): Whether to include the director aggregation.
+        actors (bool): Whether to include the actor aggregation.
+        genres (bool): Whether to include the genre aggregation.
+        countries (bool): Whether to include the country aggregation.
+        ratings (bool): Whether to include the rating aggregation.
+        
+    Returns:
+        (dict): The Elasticsearch aggregations query.
     """
     aggs = {
         "total_agg": {"value_count": {"field": "type"}}

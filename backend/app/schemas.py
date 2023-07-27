@@ -1,12 +1,61 @@
 from pydantic import BaseModel
 
 
-# Querying models
+# Aggregation models
+class TopAggs(BaseModel):
+    """
+    API aggregation model for validation.
+    
+    Attriubutes:
+        director_agg (dict[str, int]): The directors with most produced films.
+        actor_agg (dict[str, int]): The most active actors in movies and shows.
+        rating_agg (dict[str, int]): The most common movie and show ratings.
+        country_agg (dict[str, int]): The top countries where films are produced.
+        genre_agg (dict[str, int]): The most common genres of movies and shows.
+    """
+    director_agg: dict[str, int]
+    actor_agg: dict[str, int]
+    rating_agg: dict[str, int]
+    country_agg: dict[str, int]
+    genre_agg: dict[str, int]
+
+class TotalAggs(BaseModel):
+    """
+    API aggregation model for validation.
+
+    Attriubutes:
+        total_agg (int): The total number of movies and shows.
+    """
+    total_agg: int
+
+class DurationAggs(BaseModel):
+    """
+    API aggregation model for validation.
+    
+    Attriubutes:
+        histo_dur_agg (dict[str, int]): The histogram of durations.
+        avg_dur_agg (int): The average duration of the movie or show.
+    """
+    histo_dur_agg: dict[str, int]
+    avg_dur_agg: int
+
+
+# Response models
 class Film(BaseModel):
     """
     API response model for validation.
 
     Attriubutes:
+        title (str): The title of the film.
+        director (str): The director of the film.
+        cast (list[str]): The cast of the film.
+        country (str): The country of origin of the film.
+        date_added (str): The date the film was added to Netflix.
+        release_year (int): The year the film was released.
+        rating (str): The rating of the film.
+        duration (int): The duration of the film.
+        genres (list[str]): The genres of the film.
+        description (str): The description of the film.
     """
     title: str | None = ''
     director: str | None = ''
@@ -19,42 +68,6 @@ class Film(BaseModel):
     genres: list[str] | None = []
     description: str | None = ''
 
-class Performer(BaseModel):
-    num_movies: int
-    num_shows: int
-    genres: list[str]
-    releases: dict[str, int]
-
-class Actor(Performer):
-    directors: list[str]
-
-class Director(Performer):
-    actors: list[str]
-
-# Aggregation models
-class TopAggs(BaseModel):
-    director_agg: dict[str, int]
-    actor_agg: dict[str, int]
-    rating_agg: dict[str, int]
-    country_agg: dict[str, int]
-    genre_agg: dict[str, int]
-
-class TotalAggs(BaseModel):
-    total_agg: int
-
-class DurationAggs(BaseModel):
-    histo_dur_agg: dict[str, int]
-    avg_dur_agg: int
-
-#class PlotAgg(BaseModel):
-#    movies_added_by_year: dict[int, int]
-#    movies_released_by_year: dict[int, int]
-#    movie_duration_hist: dict[str, int]
-#    shows_added_by_year: dict[int, int]
-#    shows_released_by_year: dict[int, int]
-
-
-# Response models
 class MovieAggs(TotalAggs, DurationAggs):
     pass
 
@@ -64,8 +77,8 @@ class ShowAggs(TotalAggs):
 class AllAggs(TotalAggs, TopAggs):
     pass
 
-    
 
+# Elasticsearch models
 ELASTIC_MAP = {
     "properties": {
         "type": {"type": "byte"},

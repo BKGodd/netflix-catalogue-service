@@ -26,7 +26,16 @@ def get_elastic_db():
 
 
 async def init_elastic_db(esdb):
-    """Initialize Elasticsearch database on service startup."""
+    """
+    Initialize the Elasticsearch database with the
+    given connection instance.
+    
+    Args:
+        esdb (AsyncElasticsearch): Database connection instance.
+        
+    Returns:
+        None
+    """
     # Create elasticsearch index if DNE
     if not await esdb.indices.exists(index=os.environ['ELASTIC_INDEX']):
         # Explicit mappings
@@ -40,6 +49,14 @@ async def init_elastic_db(esdb):
 
 def filter_row(row):
     """
+    Process the given row to be inserted into the
+    Elasticsearch database.
+
+    Args:
+        row (dict): The row to process and simplify for use.
+    
+    Returns:
+        None
     """
     # For optimizing elasticsearch, turn empty strings to None
     for key, value in row.items():
@@ -128,8 +145,8 @@ def get_row(csv_filepath):
 
 def filter_text(text, accents=True, punct=True):
     """
-    Process the given text to be either queried or inserted into
-    the Elasticsearch database.
+    Process the given text to be inserted into the
+    Elasticsearch database.
 
     Args:
         text (str): The text to process and simplify for use.
