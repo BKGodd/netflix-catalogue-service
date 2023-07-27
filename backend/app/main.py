@@ -204,7 +204,8 @@ def build_aggs(avg_duration=False, histo_duration=False, directors=False,
         aggs["avg_dur_agg"] = {"avg": {"field": "duration"}}
     if histo_duration:
         aggs["histo_dur_agg"] = {"histogram": {"field": "duration",
-                                               "interval": 20}}
+                                               "interval": 20,
+                                               "min_doc_count": 10}}
     if directors:
         aggs["director_agg"] = {"terms": {"field": "director",
                                           "size": 5}}
