@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators'
+import { map, shareReplay } from 'rxjs/operators'
 
-interface AggData {
-  total: Object
-  movie: Object
-  show: Object
+interface AggObject {
+  total: Observable<any>
+  movie: Observable<any>
+  show: Observable<any>
 }
 
 @Injectable({
@@ -64,26 +64,24 @@ export class AggsService {
     private dataShow = {'total_agg': 2676}
 
   constructor(private http: HttpClient) {
-    console.log("GETTING CALLED")
-    this.aggData$ = this.http.get<any>('/api/aggs/').pipe(shareReplay(1));
-    this.aggMovieData$ = this.http.get<any>('/api/aggs/movie/').pipe(shareReplay(1));
-    this.aggShowData$ = this.http.get<any>('/api/aggs/show/').pipe(shareReplay(1));
+    this.aggData$ = this.http.get<any>('/api/aggs/').pipe(
+      map((data) => this.cleanData(data)),
+      shareReplay(1));
+    this.aggMovieData$ = this.http.get<any>('/api/aggs/movie/').pipe(
+      map((data) => this.cleanData(data)),
+      shareReplay(1));
+    this.aggShowData$ = this.http.get<any>('/api/aggs/show/').pipe(
+      map((data) => this.cleanData(data)),
+      shareReplay(1));
   }
 
-  getData(): Observable<any> {
-    return this.aggData$;
+  getData(): AggObject {
+    return {
+      total: this.aggData$,
+      movie: this.aggMovieData$,
+      show: this.aggShowData$
+    }
   }
-
-
-  
-
-
-
-
-
-
-
-
 
   getAggsData(apiEndpoint: string): Observable<any> {
     return this.http.get<any>(apiEndpoint);
