@@ -4,7 +4,7 @@
 FROM python:3.11.4-alpine
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /backend/app
 
 # Copy the backend files to the container's working directory
 COPY requirements.txt .
@@ -14,7 +14,8 @@ RUN apk add --update --no-cache gcc g++ python3-dev libpq-dev && \
     pip install -r requirements.txt && \
     adduser -D app_user
 
-COPY ./app /app
+COPY __init__.py /backend/
+COPY ./app /backend/app
 
 # Expose the port used by the FastAPI server
 EXPOSE 8000

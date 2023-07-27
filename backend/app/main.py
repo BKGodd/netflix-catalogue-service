@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
-
 import schemas
 from database import get_elastic_db, init_elastic_db
 
@@ -17,16 +16,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Create a connection from a pool of Elasticsearch database instances
 esdb = get_elastic_db()
 
 @app.on_event("startup")
 async def startup():
-    """"""
+    """
+    Initialize the Elasticsearch database on startup.
+    
+    Returns:
+        None
+    """
     await init_elastic_db(esdb)
 
 @app.on_event("shutdown")
 async def shutdown():
-    """"""
+    """
+    Close the Elasticsearch database connection on shutdown.
+
+    Returns:
+        None
+    """
     await esdb.close()
 
 
@@ -141,20 +151,14 @@ def build_query(selector, search_text=''):
     Returns:
         (dict): The Elasticsearch query.
     """
+    # To optimize ES space, store as a byte
     search_param = -1
     if selector == 'movie':
         search_param = 1
     elif selector == "show":
         search_param = 0
 
-    #if selector == 'actor':
-    #    search_fields = ['cast']
-    #if selector == 'director':
-    #    search_fields = ['director']
-    #else:
-        #search_fields = ['title', 'director', 'cast', 'country',
-        #                 'genres', 'description']
-        
+    # Build the final query
     if search_param == -1:
         query = {"match_all": {}}
     else:
@@ -195,6 +199,7 @@ def build_aggs(avg_duration=False, histo_duration=False, directors=False,
     Returns:
         (dict): The Elasticsearch aggregations query.
     """
+    # Always return the total aggregation
     aggs = {
         "total_agg": {"value_count": {"field": "type"}}
     }
