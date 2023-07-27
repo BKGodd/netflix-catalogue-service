@@ -26,19 +26,26 @@ describe('SearchComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should test if cast response is a proper array', () => {
+    component.searchResult.cast = null;
+    expect(component.isCastArray()).toEqual(false);
+
+    component.searchResult.cast = [];
+    expect(component.isCastArray()).toEqual(true);
+  });
+
+  it('should test if genres response is a proper array', () => {
+    component.searchResult.genres = null;
+    expect(component.isGenreArray()).toEqual(false);
+
+    component.searchResult.genres = [];
+    expect(component.isGenreArray()).toEqual(true);
+  });
+
   it('should test an empty search result', () => {
     const filmType = 'movie';
     const searchText = '';
-    const mockSearchResult: SearchResult = {title: '',
-                                            director: '',
-                                            cast: [],
-                                            country: '',
-                                            date_added: '',
-                                            release_year: -1,
-                                            rating: '',
-                                            duration: -1,
-                                            genres: [],
-                                            description: ''};
+    const mockSearchResult = component.nullSearch;
 
     mockSearchService.getSearchData.and.returnValue(of(mockSearchResult));
 
@@ -52,6 +59,7 @@ describe('SearchComponent', () => {
     expect(component.searchResult).toEqual(mockSearchResult);
     expect(component.isSearching).toBeFalse();
     expect(component.validResults).toBeFalse();
+    expect(component.errorRequest).toBeFalse();
   
     // Check that the getSearchData method was called with the correct parameters
     expect(mockSearchService.getSearchData).toHaveBeenCalledWith(filmType, searchText);
@@ -93,6 +101,7 @@ describe('SearchComponent', () => {
     expect(component.searchResult).toEqual(mockSearchResult);
     expect(component.isSearching).toBeFalse();
     expect(component.validResults).toBeTrue();
+    expect(component.errorRequest).toBeFalse();
   
     // Check that the getSearchData method was called with the correct parameters
     expect(mockSearchService.getSearchData).toHaveBeenCalledWith(filmType, searchText);
@@ -126,6 +135,39 @@ describe('SearchComponent', () => {
   
     // Check that the getSearchData method was called with the correct parameters
     expect(mockSearchService.getSearchData).toHaveBeenCalledWith(filmType, searchText);
+  });
+
+  it('should handle error on onSearch', () => {
+    // Set the return value for the getSearchData spy to throw an error
+    const errorMessage = 'Mock Error';
+    mockSearchService.getSearchData.and.returnValue(throwError(errorMessage));
+
+    // Initial values before calling onSearch
+    component.searchText = 'search_query';
+    component.searchResult = { title: 'Title',
+                                director: 'Director',
+                                cast: [],
+                                country: 'Country',
+                                date_added: '2023-07-01',
+                                release_year: 2023,
+                                rating: 'PG-13',
+                                duration: 120,
+                                genres: [],
+                                description: 'Description' };
+    component.isSearching = false;
+    component.validResults = true;
+    component.errorRequest = false;
+
+    spyOn(console, 'error');
+
+    component.onSearch();
+
+    expect(component.searchResult).toEqual(component.nullSearch);
+    expect(component.errorRequest).toBeTrue();
+    expect(component.isSearching).toBeFalse();
+
+    // Check if the console.error is called with the correct error message
+    expect(console.error).toHaveBeenCalledWith('Error fetching data:', errorMessage);
   });
 
 });

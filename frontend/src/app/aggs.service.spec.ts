@@ -24,7 +24,7 @@ describe('AggsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get data from the server for total', () => {
+  it('should test an HTTP GET request for total aggs', () => {
     const expectedRes = {'director_agg': {'Rajiv Chilaka': 19,
                           'Raul Campos Jan Suter': 18,
                           'Marcus Raboy': 16,
@@ -62,7 +62,7 @@ describe('AggsService', () => {
     req.flush(expectedRes);
   });
 
-  it('should get data from the server for movie', () => {
+  it('should test an HTTP GET request for movie aggs', () => {
     const expectedData = {'histo_dur_agg': {'0': 25,
                           '20': 144,
                           '40': 288,
@@ -87,7 +87,7 @@ describe('AggsService', () => {
     req.flush(expectedData);
   });
 
-  it('should get data from the server for show', () => {
+  it('should test an HTTP GET request for show aggs', () => {
     const expectedData = {'total_agg': 2676};
     service.getData().show.subscribe(
       (data) => {
