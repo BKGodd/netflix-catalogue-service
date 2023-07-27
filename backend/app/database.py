@@ -1,5 +1,7 @@
 import os
 import csv
+from string import punctuation
+from unidecode import unidecode as ud
 from ssl import create_default_context
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_bulk
@@ -51,14 +53,24 @@ def filter_row(row):
         row['type'] = 1
     else:
         row['type'] = -1
+    
+    # Titles and descriptions could contain punctuation, keep them
+    if row['title']:
+        row['title'] = filter_text(row['title'], punct=False)
+    if row['description']:
+        row['description'] = filter_text(row['description'], punct=False)
+
+    # We don't want director names to have punctuation or accents
+    if row['director']:
+        row['director'] = filter_text(row['director'])
 
     # Convert cast to a list of names
     if row['cast']:
-        row['cast'] = [name.strip() for name in row['cast'].split(',')]
+        row['cast'] = [filter_text(name) for name in row['cast'].split(',')]
 
     # Convert catagories to a list of discrete genres
     if row['genres']:
-        row['genres'] = [cat.strip() for cat in row['genres'].split(',')]
+        row['genres'] = [filter_text(genre) for genre in row['genres'].split(',')]
 
     # Reformat date
     if row['date_added']:
@@ -112,3 +124,30 @@ def get_row(csv_filepath):
                 "_index": os.environ['ELASTIC_INDEX'],
                 "_source": row
             }
+
+
+def filter_text(text, accents=True, punct=True):
+    """
+    Process the given text to be either queried or inserted into
+    the Elasticsearch database.
+
+    Args:
+        text (str): The text to process and simplify for use.
+
+    Returns:
+        (str): The text after being processed.
+
+    Notes:
+        The following changes are made to the string:
+            - Punctuation removed
+            - Character accents removed
+            - All extraneous whitespace removed
+            - Lowered capitalization
+    """
+    if isinstance(text, str):
+        if punct:
+            text = text.translate(str.maketrans('', '', punctuation))
+        if accents:
+            text = ud(text)
+        return ' '.join(text.split())
+    return ''
