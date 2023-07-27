@@ -1,0 +1,77 @@
+.card-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    row-gap: clamp(20px, 4vh, 80px);
+    column-gap: 1vw;
+    justify-content: center;
+    margin-top: 20px;
+}
+.card-container.inner {
+    grid-template-columns: 33% 33% 33%;
+    row-gap: clamp(20px, 1vh, 50px);
+}
+.card-container.singular {
+    grid-template-columns: 100%;
+}
+
+@media (max-width: 800px) {
+    .card-container {
+      grid-template-columns: 100%;
+    }
+
+    .card-container.inner {
+        grid-template-columns: 33% 33% 33%;
+
+    }
+  }
+
+.card {
+    all: unset;
+    border-radius: 8px;
+    background-color: transparent;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 1;
+    flex-direction: column;
+    max-height: 500px;
+}
+.title {
+    margin-left: 50px;
+}
+.card.display {
+    background-color: #e5e5e5;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+h1 {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 8vw, 80px);
+    padding-top: clamp(20px, 2vh, 50px);
+    padding-bottom: clamp(20px, 2vh, 50px);
+}
+h1.header {
+    padding-top: clamp(10px, 2vh, 30px);
+    padding-bottom: clamp(10px, 1vh, 20px);
+}
+h2 {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 4vw, 40px);
+}
+h3 {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 3vw, 40px);
+    font-weight: normal;
+    padding-top: clamp(10px, 1vh, 20px);
+    line-height: 1;
+}
+h3.title {
+    font-size: large;
+}

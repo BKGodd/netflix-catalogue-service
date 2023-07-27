@@ -1,0 +1,118 @@
+<ng-container *ngIf="aggMovieResponse && aggShowResponse">
+    <h1 class="header">Stats</h1>
+
+    <div class="card-container singular">
+        <div class="card-container inner">
+            <div class="card display">
+                <h2> Total Movies: </h2>
+                <h3 *ngIf="aggMovieResponse.total_agg"> {{ aggMovieResponse.total_agg }} </h3>
+                <h3 *ngIf="!aggMovieResponse.total_agg"> N/A </h3>
+            </div>
+
+            <div class="card display">
+                <h2> Total Shows: </h2>
+                <h3 *ngIf="aggShowResponse.total_agg"> {{ aggShowResponse.total_agg }} </h3>
+                <h3 *ngIf="!aggShowResponse.total_agg"> N/A </h3>
+            </div>
+
+            <div class="card display">
+                <h2> Average Movie Duration: </h2>
+                <h3 *ngIf="aggMovieResponse.avg_dur_agg"> {{ aggMovieResponse.avg_dur_agg }} min. </h3>
+                <h3 *ngIf="!aggMovieResponse.avg_dur_agg"> N/A </h3>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+
+<ng-container *ngIf="aggResponse">
+    <h1 class="header">Plots</h1>
+
+    <div class="card-container">
+        <div class="card">
+            <h3 class="title">Movie Duration Histogram</h3>
+            <ngx-charts-bar-vertical
+                [scheme]="'fire'"
+                [results]="aggMovieResponse.histo_dur_agg"
+                [xAxisLabel]="'Minutes'"
+                [yAxisLabel]="'Number of Movies'"
+                [legend]="false"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxis]="true"
+                [yAxis]="true"
+                [gradient]="false">
+            </ngx-charts-bar-vertical>
+        </div>
+
+        <div class="card">
+            <h3 class="title">Most Common Categories</h3>
+            <ngx-charts-bar-vertical
+                [scheme]="'forest'"
+                [results]="aggResponse.genre_agg"
+                [xAxisLabel]="'Category'"
+                [yAxisLabel]="'Number of Movies & Shows'"
+                [legend]="false"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxis]="true"
+                [yAxis]="true"
+                [gradient]="false">
+            </ngx-charts-bar-vertical>
+        </div>
+
+        <div class="card">
+            <h3 class="title">Countries with Most Produced Movies & Shows</h3>
+            <ngx-charts-pie-chart
+                [scheme]="'picnic'"
+                [results]="aggResponse.country_agg"
+                [labels]="true"
+                [doughnut]="false"
+                [gradient]="false">
+            </ngx-charts-pie-chart>
+        </div>
+
+        <div class="card">
+            <h3 class="title">Most Common Ratings of Movies & Shows</h3>
+            <ngx-charts-pie-chart
+                [scheme]="'picnic'"
+                [results]="aggResponse.rating_agg"
+                [labels]="true"
+                [doughnut]="true"
+                [gradient]="false">
+            </ngx-charts-pie-chart>
+        </div>
+
+        <div class="card">
+            <h3 class="title">Most Active Directors</h3>
+            <ngx-charts-bar-vertical
+                [scheme]="'fire'"
+                [results]="aggResponse.director_agg"
+                [xAxisLabel]="'Directors'"
+                [yAxisLabel]="'Movies & Shows Directed'"
+                [legend]="false"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxis]="true"
+                [yAxis]="true"
+                [gradient]="false">
+            </ngx-charts-bar-vertical>
+        </div>
+
+        <div class="card">
+            <h3 class="title">Most Active Actors / Actresses</h3>
+            <ngx-charts-bar-vertical
+                [scheme]="'fire'"
+                [results]="aggResponse.actor_agg"
+                [xAxisLabel]="'Actors / Actresses'"
+                [yAxisLabel]="'Movies & Shows Performed'"
+                [legend]="false"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxis]="true"
+                [yAxis]="true"
+                [gradient]="false">
+            </ngx-charts-bar-vertical>
+        </div>
+    </div>
+</ng-container>
