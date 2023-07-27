@@ -1,20 +1,19 @@
 import { Component } from '@angular/core';
 import { SearchService } from '../search.service';
-import { trigger, transition, style, animate, AnimationTriggerMetadata } from '@angular/animations';
 import { setFadeInOut } from '../app.animation';
 
 
-interface SearchResult {
-  title: string
-  director: string
-  cast: string[]
-  country: string
-  date_added: string
-  release_year: number
-  rating: string
-  duration: number
-  genres: string[]
-  description: string
+export interface SearchResult {
+  title: string | null
+  director: string | null
+  cast: string[] | null
+  country: string | null
+  date_added: string | null
+  release_year: number | null
+  rating: string | null
+  duration: number | null
+  genres: string[] | null
+  description: string | null
 }
 
 @Component({
@@ -24,7 +23,7 @@ interface SearchResult {
   animations: [setFadeInOut]
 })
 export class SearchComponent {
-  private nullSearch = {title: "", director: "", cast: [], country: "",
+  nullSearch = {title: "", director: "", cast: [], country: "",
                         date_added: "", release_year: -1, rating: "",
                         duration: -1, genres: [], description: ""};
   filmType: string = "movie";
@@ -32,14 +31,15 @@ export class SearchComponent {
   searchResult: SearchResult = this.nullSearch;
   isSearching: boolean = false;
   validResults: boolean = true;
+  errorRequest: boolean = false;
 
   constructor(private searchService: SearchService) {}
 
   isCastArray(): boolean {
-    return Array.isArray(this.searchResult.cast);
+    return Array.isArray(this.searchResult.cast) && this.searchResult.cast.length > 0;
   }
   isGenreArray(): boolean {
-    return Array.isArray(this.searchResult.genres);
+    return Array.isArray(this.searchResult.genres) && this.searchResult.genres.length > 0;
   }
 
   onFilmTypeChange() {
@@ -60,6 +60,7 @@ export class SearchComponent {
     this.isSearching = true;
     this.searchService.getSearchData(this.filmType, this.searchText).subscribe(
       (result: SearchResult) => {
+        this.errorRequest = false;
         this.searchResult = result;
         // Update date to be human readable
         if (this.searchResult.date_added) {
@@ -76,38 +77,11 @@ export class SearchComponent {
         this.isSearching = false;
       },
       (error) => {
-        this.searchResult = {'title': 'Some title',
-        'director': 'Herman Yau',
-        'cast': ['Francis Chun-Yu Ng',
-         'Louis Koo',
-         'Anita Yuen',
-         'Tat-Ming Cheung',
-         'Jocelyn Choi',
-         'Ng Siu-hin',
-         'Lam Suet',
-         'Anthony Wong Chau-Sang',
-         'Lo Hoi-pang'],
-        'country': 'Hong Kong',
-        'date_added': '04302019',
-        'release_year': 2019,
-        'rating': 'TV-MA',
-        'duration': 92,
-        'genres': ['Comedies', 'International Movies'],
-        'description': 'When a neighbor blocks their view of the city with a commercial billboard, a Hong Kong family resorts to drastic, imaginative measures to take it down.'};
-        
-        // Update date to be human readable
-        if (this.searchResult.date_added) {
-          var date = this.searchResult.date_added.slice(0, 2) + '/' + this.searchResult.date_added.slice(2);
-          date = date.slice(0, 5) + '/' + date.slice(5);
-          this.searchResult.date_added = date;
-        }
-
-
+        this.searchResult = this.nullSearch;
+        this.errorRequest = true;
         console.error('Error fetching data:', error);
         this.isSearching = false;
       }
     )
   }
-
 }
-

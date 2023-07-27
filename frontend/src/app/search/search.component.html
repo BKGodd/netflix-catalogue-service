@@ -30,10 +30,10 @@
 
     <div class="card" [@setFadeInOut]="{value: '', params: {duration: 300}}">
         <h2> Cast: </h2>
-        <ul *ngIf="isCastArray() && searchResult.cast.length > 0">
+        <ul *ngIf="isCastArray()">
             <li *ngFor="let actor of searchResult.cast">{{ actor }}</li>
         </ul>
-        <h3 *ngIf="!isCastArray() || searchResult.cast.length === 0"> N/A </h3>
+        <h3 *ngIf="!isCastArray()"> N/A </h3>
     </div>
 
     <div class="card" [@setFadeInOut]="{value: '', params: {duration: 400}}">
@@ -75,14 +75,18 @@
 
     <div class="card" [@setFadeInOut]="{value: '', params: {duration: 1000}}">
         <h2> Categories: </h2>
-        <ul *ngIf="isGenreArray() && searchResult.genres.length > 0">
+        <ul *ngIf="isGenreArray()">
             <li *ngFor="let genre of searchResult.genres">{{ genre }}</li>
         </ul>
-        <h3 *ngIf="!isGenreArray() || searchResult.genres.length === 0"> N/A </h3>
+        <h3 *ngIf="!isGenreArray()"> N/A </h3>
     </div>
 </div>
 
 
 <div *ngIf="!validResults">
     <h1>No Results...</h1>
+</div>
+
+<div *ngIf="errorRequest">
+    <h1>Something went wrong...</h1>
 </div>

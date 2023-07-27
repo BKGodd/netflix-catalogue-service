@@ -83,11 +83,6 @@ export class AggsService {
     }
   }
 
-  getAggsData(apiEndpoint: string): Observable<any> {
-    return this.http.get<any>(apiEndpoint);
-  }
-
-
   cleanData(data: Object) {
     var newObject: any = {};
     for (const [keyAgg, valueAgg] of Object.entries(data)) {
@@ -103,27 +98,4 @@ export class AggsService {
 
     return newObject;
   }
-
-  /*
-  getData2(apiEndpoint: string) {
-    this.getAggsData(apiEndpoint).subscribe(
-      (data: Object) => {
-        
-        if (apiEndpoint.includes('movie')) {
-          return this.cleanData(data);
-        } else if (apiEndpoint.includes('show')) {
-          this.aggShowResponse = this.cleanData(data);
-        } else {
-          this.aggResponse = this.cleanData(data);
-        }
-      },
-      error => {
-        this.aggResponse = this.cleanData(this.dataTotal);
-        this.aggMovieResponse = this.cleanData(this.dataMovie);
-        this.aggShowResponse = this.cleanData(this.dataShow);
-        console.error('Error fetching data:', error);
-      }
-    );
-  }
-  */
 }
