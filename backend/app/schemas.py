@@ -8,16 +8,16 @@ class Film(BaseModel):
 
     Attriubutes:
     """
-    title: str
-    director: str
-    cast: list[str]
-    country: str
-    date_added: str
-    release_year: int
-    rating: str
-    duration: int
-    genres: list[str]
-    description: str
+    title: str | None = ''
+    director: str | None = ''
+    cast: list[str] | None = []
+    country: str | None = ''
+    date_added: str | None = ''
+    release_year: int | None = -1
+    rating: str | None = ''
+    duration: int | None = -1
+    genres: list[str] | None = []
+    description: str | None = ''
 
 class Performer(BaseModel):
     num_movies: int
@@ -72,7 +72,7 @@ ELASTIC_MAP = {
         "title": {"type": "text"},
         "director": {"type": "keyword"},
         "cast": {
-            "type": "keyword",
+            "type": "text",
             "fields": {
                 "raw": {
                     "type": "keyword"}
@@ -85,7 +85,7 @@ ELASTIC_MAP = {
         "rating": {"type": "byte"},
         "duration": {"type": "integer"},
         "genres": {
-            "type": "keyword",
+            "type": "text",
             "fields": {
                 "raw": {
                     "type": "keyword"}
