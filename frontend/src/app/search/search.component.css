@@ -1,0 +1,131 @@
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 2000px;
+}
+
+.search-icon {
+  width: clamp(50px, 17vw, 300px);
+}
+
+select {
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: lightgrey;
+    margin-left: 20px;
+    padding-left: 12px;
+    padding-right: 12px;
+    height: 40px;
+    font-weight: bolder;
+    font-size: medium;
+}
+
+input {
+    width: 100%;
+    max-width: 500px;
+    border: 2px solid black;
+    border-radius: 25px;
+    height: 40px;
+    background-color: lightgrey;
+    padding-left: 20px;
+    font-size: 18px;
+}
+
+
+.card svg.material-icons path {
+    fill: #888;
+  }
+
+  .card-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .card {
+    all: unset;
+    border-radius: 8px;
+    /*border: 1px solid #eee;*/
+    background-color: #e5e5e5;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+    flex-direction: column;
+  }
+
+  .card-container .card:not(:last-child) {
+    margin-right: 0;
+  }
+
+  .card.card-small {
+    height: 16px;
+    width: 168px;
+  }
+
+  .card-container .card:not(.highlight-card) {
+    cursor: pointer;
+  }
+
+  .card-container .card:not(.highlight-card):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-container .card:not(.highlight-card):hover .material-icons path {
+    fill: rgb(105, 103, 103);
+  }
+
+  .card.highlight-card {
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+    border: none;
+    width: auto;
+    min-width: 30%;
+    position: relative;
+  }
+
+  .card.card.highlight-card span {
+    margin-left: 60px;
+  }
+
+h1 {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 8vw, 80px);
+    padding-top: clamp(20px, 2vh, 50px);
+    padding-bottom: clamp(20px, 2vh, 50px);
+}
+h2 {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 4vw, 50px);
+}
+h3 {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 3vw, 50px);
+    font-weight: normal;
+    padding-top: clamp(10px, 1vh, 20px);
+    line-height: 1;
+}
+ul {
+    margin: 8px 0;
+    color: #000000;
+    font-size: clamp(8px, 2.5vw, 50px);
+    font-weight: normal;
+    padding-top: clamp(10px, 1vh, 20px);
+}
+li {
+    line-height: 1;
+    padding-top: 8px;
+}

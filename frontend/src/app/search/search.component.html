@@ -1,0 +1,88 @@
+<div class="search-container">
+    <img class="search-icon" alt="Netflix Title" src="assets/netflix-title.svg"/>
+</div>
+
+<div class="search-container">
+        <input
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="whileTyping()"
+        (keyup)="enterKey($event)"
+        placeholder="Search Netflix Catalogue..."
+        />
+    
+        <select [(ngModel)]="filmType" (ngModelChange)="onFilmTypeChange()">
+            <option value="movie">Movies</option>
+            <option value="show">TV Shows</option>
+        </select>   
+</div>
+
+<h1 *ngIf="validResults && searchResult.title" [@setFadeInOut]="{value: '', params: {duration: 100}}">
+    {{ searchResult.title }}
+</h1>
+
+<div class="card-container" *ngIf="validResults && searchResult.title">
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 200}}">
+        <h2> Description: </h2>
+        <h3 *ngIf="searchResult.description"> {{ searchResult.description }} </h3>
+        <h3 *ngIf="!searchResult.description"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 300}}">
+        <h2> Cast: </h2>
+        <ul *ngIf="isCastArray() && searchResult.cast.length > 0">
+            <li *ngFor="let actor of searchResult.cast">{{ actor }}</li>
+        </ul>
+        <h3 *ngIf="!isCastArray() || searchResult.cast.length === 0"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 400}}">
+        <h2> Director: </h2>
+        <h3 *ngIf="searchResult.director"> {{ searchResult.director }} </h3>
+        <h3 *ngIf="!searchResult.director"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 500}}">
+        <h2> Country of Origin: </h2>
+        <h3 *ngIf="searchResult.country"> {{ searchResult.country }} </h3>
+        <h3 *ngIf="!searchResult.country"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 600}}">
+        <h2> Date Added: </h2>
+        <h3 *ngIf="searchResult.date_added"> {{ searchResult.date_added }} </h3>
+        <h3 *ngIf="!searchResult.date_added"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 700}}">
+        <h2> Release Year: </h2>
+        <h3 *ngIf="searchResult.release_year"> {{ searchResult.release_year }} </h3>
+        <h3 *ngIf="!searchResult.release_year"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 800}}">
+        <h2> Rating: </h2>
+        <h3 *ngIf="searchResult.rating"> {{ searchResult.rating }} </h3>
+        <h3 *ngIf="!searchResult.rating"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 900}}">
+        <h2 *ngIf="filmType == 'movie'"> Duration in minutes: </h2>
+        <h2 *ngIf="filmType !== 'movie'"> Number of Seasons: </h2>
+        <h3 *ngIf="searchResult.duration"> {{ searchResult.duration }} </h3>
+        <h3 *ngIf="!searchResult.duration"> N/A </h3>
+    </div>
+
+    <div class="card" [@setFadeInOut]="{value: '', params: {duration: 1000}}">
+        <h2> Categories: </h2>
+        <ul *ngIf="isGenreArray() && searchResult.genres.length > 0">
+            <li *ngFor="let genre of searchResult.genres">{{ genre }}</li>
+        </ul>
+        <h3 *ngIf="!isGenreArray() || searchResult.genres.length === 0"> N/A </h3>
+    </div>
+</div>
+
+
+<div *ngIf="!validResults">
+    <h1>No Results...</h1>
+</div>
