@@ -5,3 +5,4 @@ pytest
 elasticsearch
 aiohttp
 unidecode
+httpx
