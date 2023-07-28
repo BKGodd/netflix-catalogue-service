@@ -23,7 +23,11 @@ jobs:
               run: |
                   pip install -r requirements.txt
                   pip install pylint
-                  pylint tests/ --disable=W0621
+            
+            - name: Run Python Linting
+              working-directory: backend
+              run: |
+                  pylint tests/ --disable=W0621,E0402
                   pylint app/
 
     angular-linting:

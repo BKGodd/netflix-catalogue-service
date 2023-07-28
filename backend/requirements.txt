@@ -6,3 +6,4 @@ elasticsearch
 aiohttp
 unidecode
 httpx
+requests
