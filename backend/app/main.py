@@ -4,7 +4,7 @@ Description: This module is for defining the API and
              handling requests to the Elasticsearch database.
 """
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import schemas
 from database import get_elastic_db, init_elastic_db
@@ -60,6 +60,9 @@ async def get_film(film_type: str, query: str):
     Returns:
         (dict): The film data retrieved from the database.
     """
+    if film_type not in {'movie', 'show'}:
+        detail = f"Expected 'movie' or 'show', got '{film_type}'"
+        raise HTTPException(status_code=404, detail=detail)
     query = build_query(film_type, query)
     result = await esdb.search(index=os.environ['ELASTIC_INDEX'], query=query,
                                size=8, track_total_hits=True)

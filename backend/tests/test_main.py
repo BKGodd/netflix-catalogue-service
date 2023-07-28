@@ -78,7 +78,12 @@ def test_connection(app_url):
     assert requests.get(app_url, timeout=TIMEOUT).status_code == 200
 
 
-def test_wrong_endpoint(app_url):
+@pytest.mark.parametrize("endpoint", ["/api/",
+                                      "/api/films/",
+                                      "/api/film/movies/",
+                                      "/api/film/shows/",
+                                      "/api/film/anything/"])
+def test_wrong_endpoint(app_url, endpoint):
     """
     Test an incorrect endpoint.
     
@@ -88,7 +93,9 @@ def test_wrong_endpoint(app_url):
     Returns:
         None
     """
-    assert requests.get(app_url + "/api/", timeout=TIMEOUT).status_code == 404
+    assert requests.get(app_url + endpoint,
+                        params={"query": "anything"},
+                        timeout=TIMEOUT).status_code == 404
 
 
 @pytest.mark.parametrize("film_type", ["movie", "show"])
