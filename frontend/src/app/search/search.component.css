@@ -47,6 +47,11 @@ input {
     margin-top: 16px;
     padding-top: clamp(15px, 2vh, 50px);
   }
+  @media (max-width: 800px) {
+    .card-container {
+      grid-template-columns: 100%;
+    }
+  }
 
   .inner-container {
     display: flex;
