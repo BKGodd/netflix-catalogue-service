@@ -50,4 +50,5 @@ jobs:
             - name: Run Angular Linting
               working-directory: frontend
               run: |
-                  ng lint
+                npx eslint --init
+                ng lint
