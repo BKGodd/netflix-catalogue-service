@@ -52,3 +52,36 @@ jobs:
               working-directory: frontend
               run: |
                 ng lint
+
+    python-testing:
+        name: Python Linting
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            
+            - name: Setup Python
+              run: |
+                sudo apt-get update
+                sudo apt-get -y install docker.io
+                sudo apt-get -y install docker-compose
+            
+            - name: Start Docker Compose Services
+              run: docker-compose up --build -d
+            
+            - name: Setup Python
+              uses: actions/setup-python@v2
+              with:
+                python-version: 3.11
+            
+            - name: Install Python dependencies
+              working-directory: backend
+              run: |
+                    pip install -r requirements.txt
+                    pip install pylint
+            
+            - name: Run Python Tests
+              working-directory: backend
+              run: |
+                    pytest tests/
