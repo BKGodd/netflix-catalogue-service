@@ -72,11 +72,38 @@ jobs:
             - name: Install Python dependencies
               working-directory: backend
               run: |
-                    pip install -r requirements.txt
-                    pip install pylint
+                  pip install -r requirements.txt
+                  pip install pylint
             
             - name: Run Python Tests
               working-directory: backend
               run: |
-                    export PYTHONPATH=$(pwd)/app:$PYTHONPATH
-                    pytest tests/
+                  export PYTHONPATH=$(pwd)/app:$PYTHONPATH
+                  pytest tests/
+    
+    angular-testing:
+        name: Python Testing
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            
+            - name: Start Docker Compose Services
+              run: docker-compose up --build -d
+            
+            - name: Setup Node
+              uses: actions/setup-node@v2
+              with:
+                node-version: 18.15
+            
+            - name: Install Node dependencies
+              working-directory: frontend
+              run: |
+                  npm install
+                  npm install -g @angular/cli
+
+            - name: Run Angular Tests
+              working-directory: frontend
+              run: |
+                  ng test
