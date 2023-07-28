@@ -17,6 +17,74 @@
         </select>   
 </div>
 
+<div *ngIf="validResults && searchResult.length > 0">
+    <div class="card-container">
+        <div class="card" *ngFor="let result of searchResult; let i = index" [@setFadeInOut]="{value: '', params: {duration: i*100}}">
+            <div class="inner-container">
+                <h1>{{ result.title }}</h1>
+            </div>
+            <div class="inner-container">
+                <h2>Duration:</h2>
+                <h3 *ngIf="filmType == 'movie' && result.duration">{{ result.duration }} min.</h3>
+                <h3 *ngIf="filmType !== 'movie' && result.duration">{{ result.duration }} seasons</h3>
+                <h3 *ngIf="!result.duration">N/A</h3>
+            </div>
+            <div class="inner-container">
+                <h2>Director:</h2>
+                <h3 *ngIf="result.director">{{ result.director }}</h3>
+                <h3 *ngIf="!result.director">N/A</h3>
+            </div>
+            <div class="inner-container list">
+                <h2>Description:</h2>
+                <h3 *ngIf="result.description">{{ result.description }}</h3>
+                <h3 *ngIf="!result.description">N/A</h3>
+            </div>
+            <div class="inner-container">
+                <h2>Date Added:</h2>
+                <h3 *ngIf="result.date_added">{{ result.date_added }}</h3>
+                <h3 *ngIf="!result.date_added">N/A</h3>
+            </div>
+            <div class="inner-container">
+                <h2>Release Year:</h2>
+                <h3 *ngIf="result.release_year">{{ result.release_year }}</h3>
+                <h3 *ngIf="!result.release_year">N/A</h3>
+            </div>
+            <div class="inner-container">
+                <h2>Country of Origin:</h2>
+                <h3 *ngIf="result.country">{{ result.country }}</h3>
+                <h3 *ngIf="!result.country">N/A</h3>
+            </div>
+            <div class="inner-container list">
+                <h2>Cast:</h2>
+                <ul *ngIf="isCastArray(i)">
+                    <li *ngFor="let actor of result.cast" >
+                        {{ actor }}
+                    </li>
+                </ul>
+                <h3 *ngIf="!isCastArray(i)">N/A</h3>
+            </div>
+            <div class="inner-container list">
+                <h2>Categories:</h2>
+                <ul *ngIf="isGenreArray(i)">
+                    <li *ngFor="let genre of result.genres">
+                        {{ genre }}
+                    </li>
+                </ul>
+                <h3 *ngIf="!isGenreArray(i)">N/A</h3>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<div *ngIf="!validResults && searchResult.length == 0">
+    <h1 class="title">No Results...</h1>
+</div>
+
+<div *ngIf="errorRequest && searchResult.length == 0">
+    <h1 class="title">Something went wrong...</h1>
+</div>
+
+<!--
 <h1 *ngIf="validResults && searchResult.title" [@setFadeInOut]="{value: '', params: {duration: 100}}">
     {{ searchResult.title }}
 </h1>
@@ -83,10 +151,7 @@
 </div>
 
 
-<div *ngIf="!validResults">
-    <h1>No Results...</h1>
-</div>
 
-<div *ngIf="errorRequest">
-    <h1>Something went wrong...</h1>
-</div>
+
+
+-->

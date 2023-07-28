@@ -28,26 +28,30 @@ export class SearchComponent {
                         duration: -1, genres: [], description: ""};
   filmType: string = "movie";
   searchText: string = "";
-  searchResult: SearchResult = this.nullSearch;
+  searchResult: SearchResult[] = [];
   isSearching: boolean = false;
   validResults: boolean = true;
   errorRequest: boolean = false;
+  anim_delays: number[] = Array.from({ length: 8 }, (_, index) => (index + 1) * 100);
 
   constructor(private searchService: SearchService) {}
 
-  isCastArray(): boolean {
-    return Array.isArray(this.searchResult.cast) && this.searchResult.cast.length > 0;
+  
+  isCastArray(index: number): boolean {
+    return Array.isArray(this.searchResult[index].cast) &&
+      this.searchResult[index].cast!.length > 0;
   }
-  isGenreArray(): boolean {
-    return Array.isArray(this.searchResult.genres) && this.searchResult.genres.length > 0;
+  isGenreArray(index: number): boolean {
+    return Array.isArray(this.searchResult[index].genres) &&
+      this.searchResult[index].genres!.length > 0;
   }
 
   onFilmTypeChange() {
-    this.onSearch();
+    this.searchResult = [];
   }
 
   whileTyping() {
-    this.searchResult = this.nullSearch;
+    this.searchResult = [];
   }
 
   enterKey(event: KeyboardEvent) {
@@ -59,28 +63,48 @@ export class SearchComponent {
   onSearch() {
     this.isSearching = true;
     this.searchService.getSearchData(this.filmType, this.searchText).subscribe(
-      (result: SearchResult) => {
-        this.errorRequest = false;
+      (result: SearchResult[]) => {
         this.searchResult = result;
-        // Update date to be human readable
-        if (this.searchResult.date_added) {
-          var date = this.searchResult.date_added.slice(0, 2) + '/' + this.searchResult.date_added.slice(2);
-          date = date.slice(0, 5) + '/' + date.slice(5);
-          this.searchResult.date_added = date;
-        }
-        // Determine if results came back empty
-        if (!this.searchResult.title) {
+        if (this.searchResult.length == 0) {
           this.validResults = false;
         } else {
           this.validResults = true;
+          this.errorRequest = false;
+          // Turn date_added into a human readable date
+          for (let i = 0; i < this.searchResult.length; i++) {
+            if (typeof this.searchResult[i].date_added == "string" ) {
+              var date = this.searchResult[i].date_added!.slice(0, 2) + '/' + this.searchResult[i].date_added!.slice(2);
+              date = date.slice(0, 5) + '/' + date.slice(5);
+              this.searchResult[i].date_added = date;
+            }
+          }
         }
-        this.isSearching = false;
       },
       (error) => {
-        this.searchResult = this.nullSearch;
+        this.searchResult = [{'title': 'Aziz Ansari Live at Madison Square Garden',
+        'director': 'Aziz Ansari',
+        'cast': ['Aziz Ansari'],
+        'country': 'United States',
+        'date_added': '03062015',
+        'release_year': 2015,
+        'rating': 'TV-MA',
+        'duration': 58,
+        'genres': [],
+        'description': 'Stand-up comedian and TV star Aziz Ansari ("Parks and Recreation") delivers his sharp-witted take on immigrants, relationships and the food industry.'},
+       {'title': 'Aziz Ansari: Buried Alive',
+        'director': 'Will Lovelace Dylan Southern',
+        'cast': [],
+        'country': 'United States',
+        'date_added': '11012013',
+        'release_year': 2013,
+        'rating': 'TV-MA',
+        'duration': 80,
+        'genres': ['StandUp Comedy'],
+        'description': '"Parks and Recreation" star Aziz Ansari takes the stage to share his unfiltered views on adulthood, babies, marriage, love and more in the modern era.'}];
         this.errorRequest = true;
-        console.error('Error fetching data:', error);
         this.isSearching = false;
+        this.validResults = true;
+        console.error('Error fetching data:', error);
       }
     )
   }
