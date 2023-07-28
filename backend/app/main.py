@@ -19,6 +19,7 @@ app.add_middleware(
 # Create a connection from a pool of Elasticsearch database instances
 esdb = get_elastic_db()
 
+
 @app.on_event("startup")
 async def startup():
     """
@@ -28,6 +29,7 @@ async def startup():
         None
     """
     await init_elastic_db(esdb)
+
 
 @app.on_event("shutdown")
 async def shutdown():
@@ -40,7 +42,7 @@ async def shutdown():
     await esdb.close()
 
 
-@app.get("/api/film/{film_type}/", response_model=schemas.Film)
+@app.get("/api/film/{film_type}/", response_model=list[schemas.Film])
 async def get_film(film_type: str, query: str):
     """
     API endpoint for retrieving a film from the Elasticsearch database.
@@ -54,13 +56,15 @@ async def get_film(film_type: str, query: str):
     """
     query = build_query(film_type, query)
     result = await esdb.search(index=os.environ['ELASTIC_INDEX'], query=query,
-                               size=1, track_total_hits=True)
+                               size=8, track_total_hits=True)
+    response = []
     # If we get no results back, return an empty model
     if result['hits']['total']['value'] == 0:
-        return schemas.Film()
-    response = result['hits']['hits'][0]['_source']
-    response.pop('type')
-    response['rating'] = schemas.ID_TO_RATING[response['rating']]
+        return response
+    for hit in result['hits']['hits']:
+        hit['_source']['rating'] = schemas.ID_TO_RATING[hit['_source']['rating']]
+        hit['_source'].pop('type')
+        response.append(hit['_source'])
 
     return response
 
