@@ -1,12 +1,10 @@
-# give me linting for python using pylint and angular using tslint
-
 name: CI
 
 on: [push]
 
 jobs:
     python-linting:
-        name: Linting
+        name: Python Linting
         runs-on: ubuntu-latest
 
         steps:
@@ -31,7 +29,7 @@ jobs:
                   pylint app/
 
     angular-linting:
-        name: Linting
+        name: Angular Linting
         runs-on: ubuntu-latest
 
         steps:
@@ -46,7 +44,6 @@ jobs:
             - name: Install Node dependencies
               working-directory: frontend
               run: |
-                  cd frontend
                   npm install
                   npm install -g @angular/cli
             
