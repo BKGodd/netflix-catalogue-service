@@ -14,6 +14,7 @@ export class AggsComponent implements OnInit {
   constructor(private aggsService: AggsService) { }
 
   ngOnInit() {
+    // Subscribe to the aggs service observables for each type of aggregation
     for (const [aggType, aggObs] of Object.entries(this.aggsService.getData())) {
       aggObs.subscribe(
         (data: any) => {

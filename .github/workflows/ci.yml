@@ -1,0 +1,58 @@
+# give me linting for python using pylint and angular using tslint
+
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+    python-linting:
+        name: Linting
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            
+            - name: Setup Python
+              uses: actions/setup-python@v2
+              with:
+                python-version: 3.11
+            
+            - name: Install Python dependencies
+              working-directory: backend
+              run: |
+                  pip install -r requirements.txt
+            
+            - name: Run Python Linting
+              working-directory: backend
+              run: |
+                  pip install pylint
+                  pylint tests/ --disable=W0621
+                  pylint app/
+
+    angular-linting:
+        name: Linting
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            
+            - name: Setup Node
+              uses: actions/setup-node@v2
+              with:
+                node-version: 18.15
+            
+            - name: Install Node dependencies
+              working-directory: frontend
+              run: |
+                  cd frontend
+                  npm install
+                  npm install -g @angular/cli
+            
+            - name: Run Angular Linting
+              working-directory: frontend
+              run: |
+                  ng lint

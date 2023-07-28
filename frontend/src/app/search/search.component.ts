@@ -37,29 +37,35 @@ export class SearchComponent {
 
   
   isCastArray(index: number): boolean {
+    // Check if cast is an array and if it has at least one element
     return Array.isArray(this.searchResult[index].cast) &&
       this.searchResult[index].cast!.length > 0;
   }
   isGenreArray(index: number): boolean {
+    // Check if genres is an array and if it has at least one element
     return Array.isArray(this.searchResult[index].genres) &&
       this.searchResult[index].genres!.length > 0;
   }
 
   onFilmTypeChange() {
+    // Reset search results when user changes the film type
     this.searchResult = [];
   }
 
   whileTyping() {
+    // Reset search results when user types in the search bar
     this.searchResult = [];
   }
 
   enterKey(event: KeyboardEvent) {
+    // Trigger search when user presses enter
     if (event.key == 'Enter' && this.searchText) {
       this.onSearch();
     }
   }
 
   onSearch() {
+    // Get search results from the API
     this.searchService.getSearchData(this.filmType, this.searchText).subscribe(
       (result: SearchResult[]) => {
         this.searchResult = result;
