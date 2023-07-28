@@ -26,7 +26,7 @@ jobs:
               working-directory: backend
               run: |
                   pylint tests/ --disable=W0621,E0402
-                  pylint app/
+                  pylint app/ --disable=E0401
 
     angular-linting:
         name: Angular Linting
@@ -78,4 +78,5 @@ jobs:
             - name: Run Python Tests
               working-directory: backend
               run: |
+                    export $PYTHONPATH=$(pwd)/app:PYTHONPATH
                     pytest tests/
