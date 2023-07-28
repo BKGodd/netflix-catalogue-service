@@ -27,19 +27,21 @@ describe('SearchComponent', () => {
   });
 
   it('should test if cast response is a proper array', () => {
-    component.searchResult.cast = null;
-    expect(component.isCastArray()).toEqual(false);
+    component.searchResult = [component.nullSearch];
+    component.searchResult[0].cast = null;
+    expect(component.isCastArray(0)).toEqual(false);
 
-    component.searchResult.cast = [];
-    expect(component.isCastArray()).toEqual(true);
+    component.searchResult[0].cast = [];
+    expect(component.isCastArray(0)).toEqual(true);
   });
 
   it('should test if genres response is a proper array', () => {
-    component.searchResult.genres = null;
-    expect(component.isGenreArray()).toEqual(false);
+    component.searchResult = [component.nullSearch];
+    component.searchResult[0].genres = null;
+    expect(component.isGenreArray(0)).toEqual(false);
 
-    component.searchResult.genres = [];
-    expect(component.isGenreArray()).toEqual(true);
+    component.searchResult[0].genres = [];
+    expect(component.isGenreArray(0)).toEqual(true);
   });
 
   it('should test an empty search result', () => {
@@ -55,7 +57,6 @@ describe('SearchComponent', () => {
     component.onSearch();
   
     // Check that we did not obtain valid results to display (empty)
-    console.log(component.searchResult)
     expect(component.searchResult).toEqual(mockSearchResult);
     expect(component.isSearching).toBeFalse();
     expect(component.validResults).toBeFalse();
@@ -68,7 +69,7 @@ describe('SearchComponent', () => {
   it('should test a valid search result', () => {
     const filmType = 'movie';
     const searchText = 'parks';
-    const mockSearchResult: SearchResult = {title: 'Parks and Recreation',
+    const mockSearchResult: SearchResult[] = [{title: 'Parks and Recreation',
                                             director: '',
                                             cast: ['Amy Poehler',
                                               'Rashida Jones',
@@ -87,7 +88,7 @@ describe('SearchComponent', () => {
                                             rating: 'TV-14',
                                             duration: 7,
                                             genres: ['TV Comedies'],
-                                            description: 'In this Emmy-nominated comedy, an employee with a rural Parks and Recreation department is full of energy and ideas but bogged down by bureaucracy.'};
+                                            description: 'In this Emmy-nominated comedy, an employee with a rural Parks and Recreation department is full of energy and ideas but bogged down by bureaucracy.'}];
 
     mockSearchService.getSearchData.and.returnValue(of(mockSearchResult));
 
