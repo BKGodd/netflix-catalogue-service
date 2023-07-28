@@ -21,6 +21,7 @@ select {
     height: 40px;
     font-weight: bolder;
     font-size: medium;
+    color: black;
 }
 
 input {
@@ -80,7 +81,7 @@ input {
 h1 {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 3vw, 50px);
+    font-size: clamp(9px, 3vw, 40px);
     line-height: 1.1;
     padding-bottom: clamp(10px, 1vh, 20px);
 }
@@ -90,27 +91,27 @@ h1 {
 h2 {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 2vw, 40px);
+    font-size: clamp(9px, 2vw, 30px);
     line-height: 1;
 }
 h3 {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 2vw, 40px);
+    font-size: clamp(9px, 2vw, 30px);
     font-weight: normal;
     line-height: 1;
 }
 ul {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 2vw, 40px);
+    font-size: clamp(9px, 2vw, 30px);
     font-weight: normal;
-    margin-left: clamp(8px, 2.5vw, 50px);
+    margin-left: clamp(9px, 2.5vw, 50px);
 }
 li {
   margin: 8px 0;
   color: #000000;
-  font-size: clamp(8px, 2vw, 40px);
+  font-size: clamp(9px, 2vw, 30px);
   font-weight: normal;
   line-height: 0.8;
 }

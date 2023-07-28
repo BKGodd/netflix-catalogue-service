@@ -17,11 +17,14 @@
 @media (max-width: 800px) {
     .card-container {
       grid-template-columns: 100%;
+      row-gap: clamp(20px, 4vh, 60px);
     }
-
     .card-container.inner {
         grid-template-columns: 33% 33% 33%;
 
+    }
+    .card {
+        max-height: 100px;
     }
   }
 
@@ -51,7 +54,7 @@
 h1 {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 6vw, 60px);
+    font-size: clamp(9px, 6vw, 60px);
     padding-top: clamp(20px, 2vh, 50px);
     padding-bottom: clamp(20px, 2vh, 50px);
 }
@@ -62,12 +65,12 @@ h1.header {
 h2 {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 4vw, 40px);
+    font-size: clamp(9px, 4vw, 40px);
 }
 h3 {
     margin: 8px 0;
     color: #000000;
-    font-size: clamp(8px, 3vw, 40px);
+    font-size: clamp(9px, 3vw, 40px);
     font-weight: normal;
     padding-top: clamp(10px, 1vh, 20px);
     line-height: 1;
