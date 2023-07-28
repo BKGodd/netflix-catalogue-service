@@ -3,6 +3,7 @@ import { of, throwError } from 'rxjs';
 import { AggsComponent } from './aggs.component';
 import { AggsService } from '../aggs.service';
 
+
 describe('AggsComponent', () => {
   let component: AggsComponent;
   let fixture: ComponentFixture<AggsComponent>;
@@ -91,8 +92,8 @@ describe('AggsComponent', () => {
   it('should handle error on ngOnInit', () => {
     // Set the return values for the getData spy to throw an error
     mockAggsService.getData.and.returnValue({
-      total: of({}),
-      movie: of({}),
+      total: of(),
+      movie: of(),
       show: throwError('Mock Error'),
     });
 

@@ -10,7 +10,7 @@ interface AggObject {
   movie: Observable<AggMovieData>
   show: Observable<AggShowData>
 }
-interface AggData {
+export interface AggData {
   director_agg: object
   actor_agg: object
   rating_agg: object
@@ -18,12 +18,12 @@ interface AggData {
   genre_agg: object
   total_agg: number
 }
-interface AggMovieData {
+export interface AggMovieData {
   histo_dur_agg: object
   avg_dur_agg: number
   total_agg: number
 }
-interface AggShowData {
+export interface AggShowData {
   total_agg: number
 }
 
