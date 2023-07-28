@@ -11,7 +11,7 @@ Angular: 16.1.5
 # How to deploy
 This service was intended to be deployed locally. Being in the root directory (where `docker-compose.yaml` is), you can simply run the following to deploy (and detach to run in the background):
 ```bash
-docker-compose -f docker-compose.yaml up -d --build
+docker compose -f docker-compose.yaml up -d --build
 ```
 The way in which this service was built, `Elasticsearch` will use a persistent volume. Data from a locally stored dataset is considered as backup, and will be used to initialize the database if no data is found.
 
@@ -38,10 +38,10 @@ All tests and linting have been implemented in a CI pipeline using `GitHub Actio
 # How to cleanup
 If you want to stop and remove the containers, but intend to re-deploy at a later time (keep persisting volumes), simply run:
 ```bash
-docker-compose down
+docker compose down
 ```
 
 To stop and completely remove the containers, volumes, and networks, you can run:
 ```bash
-docker-compose down -v --rmi local
+docker compose down -v --rmi local
 ```
