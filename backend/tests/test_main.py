@@ -27,9 +27,11 @@ def app_aggs_url(app_url):
 @pytest.fixture
 def check_against_scheme_types():
     def _check_against_scheme_types(data, schema_dict):
-        assert data.keys() == schema_dict.keys()
-        for key, value in schema_dict.items():
-            assert type(data[key]) == type(value) or data[key] is None
+        assert isinstance(data, list)
+        for result in data:
+            assert result.keys() == schema_dict.keys()
+            for key, value in schema_dict.items():
+                assert type(result[key]) == type(value) or result[key] is None
     return _check_against_scheme_types
 
 
@@ -47,18 +49,17 @@ def test_valid_query(app_search_url, film_type, check_against_scheme_types):
     model = schemas.Film().model_dump()
     data = response.json()
     check_against_scheme_types(data, model)
-    # It should not return an empty model
-    assert data != model
+    # It should not return an empty list
+    assert data != []
     assert response.status_code == 200
 
 
 @pytest.mark.parametrize("film_type", ["movie", "show"])
 def test_empty_query(app_search_url, film_type):
     response = requests.get(f"{app_search_url}{film_type}/", params={"query": ""})
-    model = schemas.Film().model_dump()
     data = response.json()
-    # It should return an empty model
-    assert data == model
+    # It should return an empty list
+    assert data == []
     assert response.status_code == 200
 
 
@@ -72,10 +73,9 @@ def test_wrong_query_param(app_search_url, film_type):
 def test_no_search_matches(app_search_url, film_type):
     response = requests.get(f"{app_search_url}{film_type}/",
                             params={"query": "thiscannotpossiblymatchanything"})
-    model = schemas.Film().model_dump()
     data = response.json()
-    # It should return an empty model
-    assert data == model
+    # It should return an empty list
+    assert data == []
     assert response.status_code == 200
 
 
