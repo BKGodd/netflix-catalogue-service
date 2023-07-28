@@ -25,7 +25,7 @@
             </div>
             <div class="inner-container">
                 <h2>Duration:</h2>
-                <h3 *ngIf="filmType == 'movie' && result.duration">{{ result.duration }} min.</h3>
+                <h3 *ngIf="filmType === 'movie' && result.duration">{{ result.duration }} min.</h3>
                 <h3 *ngIf="filmType !== 'movie' && result.duration">{{ result.duration }} seasons</h3>
                 <h3 *ngIf="!result.duration">N/A</h3>
             </div>
@@ -76,11 +76,11 @@
     </div>    
 </div>
 
-<div *ngIf="!validResults && searchResult.length == 0">
+<div *ngIf="!validResults && searchResult.length === 0">
     <h1 class="title">No Results...</h1>
 </div>
 
-<div *ngIf="errorRequest && searchResult.length == 0">
+<div *ngIf="errorRequest && searchResult.length === 0">
     <h1 class="title">Something went wrong...</h1>
 </div>
 

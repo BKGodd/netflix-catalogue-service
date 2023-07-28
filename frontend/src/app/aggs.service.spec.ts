@@ -5,7 +5,6 @@ import { AggsService } from './aggs.service';
 describe('AggsService', () => {
   let service: AggsService;
   let httpMock: HttpTestingController;
-  const host = 'http://127.0.0.1:5400';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

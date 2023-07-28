@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  showSearchContent: boolean = true;
-  showAggsContent: boolean = false;
+  showSearchContent = true;
+  showAggsContent = false;
 
   loadSearchContent() {
     this.showSearchContent = true;
