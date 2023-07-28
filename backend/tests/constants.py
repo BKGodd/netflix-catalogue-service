@@ -1,3 +1,8 @@
+"""
+Created by: Brandon Goddard
+Description: This module is for storing constants used
+             in the testing modules.
+"""
 MOCK_TOTAL_AGG = {
     'director_agg': {'Rajiv Chilaka': 19,
     'Raul Campos Jan Suter': 18,
@@ -49,9 +54,13 @@ MOCK_CSV_ROW = {
     'show_id': 's10',
     'type': 'Movie',
     'title': 'The Starling',
-    'description': "A woman adjusting to life after a loss contends with a feisty bird that's taken over her garden - and a husband who's struggling to find a way forward.",
+    'description': ("A woman adjusting to life after a loss contends with a "
+                    "feisty bird that's taken over her garden - and a husband"
+                    " who's struggling to find a way forward."),
     'director': 'Theodore Melfi',
-    'cast': "Melissa McCarthy, Chris O'Dowd, Kevin Kline, Timothy Olyphant, Daveed Diggs, Skyler Gisondo, Laura Harrier, Rosalind Chao, Kimberly Quinn, Loretta Devine, Ravi Kapoor",
+    'cast': ("Melissa McCarthy, Chris O'Dowd, Kevin Kline, Timothy Olyphant, "
+            "Daveed Diggs, Skyler Gisondo, Laura Harrier, Rosalind Chao, "
+            "Kimberly Quinn, Loretta Devine, Ravi Kapoor"),
     'country': 'United States',
     'date_added': 'September 24, 2021',
     'release_year': '2021',

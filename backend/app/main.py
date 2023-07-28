@@ -1,8 +1,14 @@
+"""
+Created by: Brandon Goddard
+Description: This module is for defining the API and
+             handling requests to the Elasticsearch database.
+"""
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os
 import schemas
 from database import get_elastic_db, init_elastic_db
+
 
 app = FastAPI(openapi_url="/api/docs/openapi.json",
               docs_url="/api/docs/")
@@ -186,8 +192,7 @@ def build_query(selector, search_text=''):
     return query
 
 
-def build_aggs(avg_duration=False, histo_duration=False, directors=False,
-               actors=False, genres=False, countries=False, ratings=False):
+def build_aggs(**kwargs):
     """
     A helper function for building the Elasticsearch aggregations query.
 
@@ -208,25 +213,25 @@ def build_aggs(avg_duration=False, histo_duration=False, directors=False,
         "total_agg": {"value_count": {"field": "type"}}
     }
 
-    if avg_duration:
+    if kwargs.get("avg_duration", False):
         aggs["avg_dur_agg"] = {"avg": {"field": "duration"}}
-    if histo_duration:
+    if kwargs.get("histo_duration", False):
         aggs["histo_dur_agg"] = {"histogram": {"field": "duration",
                                                "interval": 20,
                                                "min_doc_count": 10}}
-    if directors:
+    if kwargs.get("directors", False):
         aggs["director_agg"] = {"terms": {"field": "director",
                                           "size": 5}}
-    if actors:
+    if kwargs.get("actors", False):
         aggs["actor_agg"] = { "terms": {"field": "cast.raw",
                                         "size": 5}}
-    if genres:
+    if kwargs.get("genres", False):
         aggs["genre_agg"] = { "terms": {"field": "genres.raw",
                                            "size": 5}}
-    if countries:
+    if kwargs.get("countries", False):
         aggs["country_agg"] = {"terms": {"field": "country",
                                          "size": 5}}
-    if ratings:
+    if kwargs.get("ratings", False):
         aggs["rating_agg"] = {"terms": {"field": "rating",
                                         "size": 5}}
 

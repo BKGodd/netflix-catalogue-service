@@ -1,3 +1,8 @@
+"""
+Created by: Brandon Goddard
+Description: This module is for defining the models used
+             for API and database interactions.
+"""
 from pydantic import BaseModel
 
 
@@ -69,13 +74,13 @@ class Film(BaseModel):
     description: str | None = ''
 
 class MovieAggs(TotalAggs, DurationAggs):
-    pass
+    """Inherits from TotalAggs and DurationAggs"""
 
 class ShowAggs(TotalAggs):
-    pass
+    """Inherits from TotalAggs"""
 
 class AllAggs(TotalAggs, TopAggs):
-    pass
+    """Inherits from TotalAggs and TopAggs"""
 
 
 # Elasticsearch models
