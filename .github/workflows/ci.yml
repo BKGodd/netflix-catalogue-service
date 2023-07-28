@@ -82,7 +82,7 @@ jobs:
                   pytest tests/
     
     angular-testing:
-        name: Python Testing
+        name: Angular Testing
         runs-on: ubuntu-latest
 
         steps:
@@ -106,4 +106,4 @@ jobs:
             - name: Run Angular Tests
               working-directory: frontend
               run: |
-                  ng test
+                ng test --browsers=ChromeHeadless --watch=false
