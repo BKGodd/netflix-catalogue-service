@@ -54,18 +54,12 @@ jobs:
                 ng lint
 
     python-testing:
-        name: Python Linting
+        name: Python Testing
         runs-on: ubuntu-latest
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
-            
-            - name: Setup Python
-              run: |
-                sudo apt-get update
-                sudo apt-get -y install docker.io
-                sudo apt-get -y install docker-compose
             
             - name: Start Docker Compose Services
               run: docker-compose up --build -d
