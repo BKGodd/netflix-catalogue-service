@@ -80,6 +80,10 @@ jobs:
               run: |
                   export PYTHONPATH=$(pwd)/app:$PYTHONPATH
                   pytest tests/
+            
+            - name: Stop containers
+              if: always()
+              run: docker-compose down
     
     angular-testing:
         name: Angular Testing
@@ -107,3 +111,7 @@ jobs:
               working-directory: frontend
               run: |
                 ng test --browsers=ChromeHeadless --watch=false
+            
+            - name: Stop containers
+              if: always()
+              run: docker-compose down
