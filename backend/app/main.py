@@ -178,6 +178,8 @@ def build_query(selector, search_text=''):
         if not search_text:
             query = {"match_none": {}}
         else:
+            # We choose to NOT use wildcards here, performance not ideal.
+            # This should be implemented with an N-gram tokenizer.
             search_fields = ['title', 'director', 'cast', 'country',
                             'genres', 'description']
             query = {
@@ -187,8 +189,7 @@ def build_query(selector, search_text=''):
                         {"multi_match": {"query": search_text,
                                         "fields": search_fields,
                                         "operator": "and"}}
-                    ],
-                    "minimum_should_match": "100%"
+                    ]
                 }
             }
 
@@ -223,16 +224,16 @@ def build_aggs(**kwargs):
                                                "interval": 20,
                                                "min_doc_count": 10}}
     if kwargs.get("directors", False):
-        aggs["director_agg"] = {"terms": {"field": "director",
+        aggs["director_agg"] = {"terms": {"field": "director.keyword",
                                           "size": 5}}
     if kwargs.get("actors", False):
-        aggs["actor_agg"] = { "terms": {"field": "cast.raw",
+        aggs["actor_agg"] = { "terms": {"field": "cast.keyword",
                                         "size": 5}}
     if kwargs.get("genres", False):
-        aggs["genre_agg"] = { "terms": {"field": "genres.raw",
+        aggs["genre_agg"] = { "terms": {"field": "genres.keyword",
                                            "size": 5}}
     if kwargs.get("countries", False):
-        aggs["country_agg"] = {"terms": {"field": "country",
+        aggs["country_agg"] = {"terms": {"field": "country.keyword",
                                          "size": 5}}
     if kwargs.get("ratings", False):
         aggs["rating_agg"] = {"terms": {"field": "rating",
