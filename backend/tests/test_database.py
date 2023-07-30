@@ -45,18 +45,14 @@ def test_filter_text():
     Returns:
         None
     """
-    text_with_punctuations = "Sample, text! with punctuations?"
-    text_with_accents = "Sample text with éàççè accents"
-    text_with_both = "Sample, text! with éàççè accents?"
+    text_to_filter = "Hello éàççè!? Name's Band-aid, James Band-aid."
+    text_with_punct = "Hello eacce!? Name's Band-aid, James Band-aid."
+    text_fully_filtered = "Hello eacce Name's Band-aid, James Band-aid"
 
-    # Test with punctuations removed
-    filtered_text = filter_text(text_with_punctuations, punct=True)
-    assert filtered_text == "Sample text with punctuations"
-
-    # Test with accents removed
-    filtered_text = filter_text(text_with_accents, accents=True)
-    assert filtered_text == "Sample text with eacce accents"
+    # Test with only accents removed
+    filtered_text = filter_text(text_to_filter, punct=False)
+    assert filtered_text == text_with_punct
 
     # Test with both punctuations and accents removed
-    filtered_text = filter_text(text_with_both)
-    assert filtered_text == "Sample text with eacce accents"
+    filtered_text = filter_text(text_to_filter)
+    assert filtered_text == text_fully_filtered

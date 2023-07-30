@@ -5,7 +5,7 @@ Description: This module is for storing constants used
 """
 MOCK_TOTAL_AGG = {
     'director_agg': {'Rajiv Chilaka': 19,
-    'Raul Campos Jan Suter': 18,
+    'Raul Campos, Jan Suter': 18,
     'Marcus Raboy': 16,
     'Suhas Kadav': 16,
     'Jay Karas': 14},
