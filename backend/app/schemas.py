@@ -88,15 +88,27 @@ ELASTIC_MAP = {
     "properties": {
         "type": {"type": "byte"},
         "title": {"type": "text"},
-        "director": {"type": "keyword"},
-        "cast": {
+        "director": {
             "type": "text",
             "fields": {
-                "raw": {
+                "keyword": {
                     "type": "keyword"}
             }
         },
-        "country": {"type": "keyword"},
+        "cast": {
+            "type": "text",
+            "fields": {
+                "keyword": {
+                    "type": "keyword"}
+            }
+        },
+        "country": {
+            "type": "text",
+            "fields": {
+                "keyword": {
+                    "type": "keyword"}
+            }
+        },
         "date_added": {"type": "date",
                        "format": "MMddyyyy"},
         "release_year": {"type": "integer"},
@@ -105,7 +117,7 @@ ELASTIC_MAP = {
         "genres": {
             "type": "text",
             "fields": {
-                "raw": {
+                "keyword": {
                     "type": "keyword"}
                 }
             },
