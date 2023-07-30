@@ -5,8 +5,8 @@ Description: This module is for initializing and loading
 """
 import os
 import csv
+import re
 from datetime import datetime
-from string import punctuation
 from ssl import create_default_context
 from unidecode import unidecode as ud
 from elasticsearch import AsyncElasticsearch
@@ -105,13 +105,13 @@ def filter_strings(row):
     if row['description']:
         row['description'] = filter_text(row['description'], punct=False)
 
-    # We don't want director names to have punctuation or accents
+    # We don't want director names to have accents
     if row['director']:
         row['director'] = filter_text(row['director'])
 
     # Convert cast to a list of names
     if row['cast']:
-        row['cast'] = [filter_text(name, punct=False) for name in row['cast'].split(',')]
+        row['cast'] = [filter_text(name) for name in row['cast'].split(',')]
 
     # Convert catagories to a list of discrete genres
     if row['genres']:
@@ -175,7 +175,7 @@ def get_row(csv_filepath):
             }
 
 
-def filter_text(text, accents=True, punct=True):
+def filter_text(text, punct=True):
     """
     Process the given text to be inserted into the
     Elasticsearch database.
@@ -190,13 +190,14 @@ def filter_text(text, accents=True, punct=True):
         The following changes are made to the string:
             - Punctuation removed
             - Character accents removed
-            - All extraneous whitespace removed
-            - Lowered capitalization
+            - Extraneous whitespace removed
     """
     if isinstance(text, str):
+        # Remove accents from characters
+        text = ud(text)
+        # Remove punctuation (except for apostrophes and hyphens due to names)
         if punct:
-            text = text.translate(str.maketrans('', '', punctuation))
-        if accents:
-            text = ud(text)
-        return ' '.join(text.split())
+            pattern = r"[^a-zA-Z0-9\s',-]"
+            text = re.sub(pattern, '', text).replace('  ', ' ')
+        return text.strip()
     return ''
