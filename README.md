@@ -48,7 +48,7 @@ docker compose down -v --rmi local
 
 # Future Improvements
 This is meant to be a blueprint for a more elaborate and scalable service. Some improvements that could be made are:
-- More comprehensive unit testing. For the frontend (angular) side, more testing of UI elements should be implemented. My tests with `Karma` and `Jasmine` are more focused on the logic and functionality, rather than the UI.
+- More comprehensive unit testing. For the frontend (Angular) side, more testing of UI elements should be implemented. My tests with `Karma` and `Jasmine` are more focused on the logic and functionality, rather than the UI.
 - More extensive logging should be implemented for both the frontend and backend. For something more elaborate, an ELK stack could be a good option. Angular would have to be configured in order to send logs either to `logstash` or directly to `Elasticsearch`. Then `Kibana` can be used to visualize the logs easily.
 - More extensive error handling. For instance, the backend should handle more exceptions around `Elasticsearch` more gracefully.
 - Provide more filtering and sorting options for the user. For instance, using date ranges and getting stats on specific actors/actresses or directors instead of just movies and TV shows.
